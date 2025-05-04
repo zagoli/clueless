@@ -54,41 +54,38 @@ defmodule CluelessCore.Players do
     players_between(players, start_index, end_index)
   end
 
+  def players_between(_players, start_player, end_player)
+      when is_nil(start_player) or is_nil(end_player) do
+    []
+  end
+
   def players_between(players, start_player, end_player)
       when is_list(players) do
-    players_size = Enum.count(players)
+    players_size = Enum.count(players) - 1
 
     cond do
       start_player < 0 or end_player < 0 ->
         []
 
-      start_player >= players_size or end_player >= players_size ->
-        []
-
-      start_player == nil or end_player == nil ->
+      start_player > players_size or end_player > players_size ->
         []
 
       true ->
-        players_indices = Enum.to_list(0..(players_size - 1))
-        players_between_internal(players_indices, start_player, end_player)
+        generate_players_between(start_player, end_player, players_size)
     end
   end
 
-  defp players_between_internal(players, start_player, end_player)
+  defp generate_players_between(start_player, end_player, players_size)
        when start_player == end_player,
-       do: players -- [start_player]
+       do: Enum.to_list(0..players_size) -- [start_player]
 
-  defp players_between_internal(players, start_player, end_player)
-       when start_player < end_player do
-    Enum.filter(players, fn player_idx ->
-      player_idx > start_player and player_idx < end_player
-    end)
-  end
+  defp generate_players_between(start_player, end_player, _players_size)
+       when start_player < end_player,
+       do: Enum.to_list(start_player..end_player) -- [start_player, end_player]
 
-  defp players_between_internal(players, start_player, end_player)
-       when start_player > end_player do
-    Enum.filter(players, fn player_idx ->
-      player_idx > start_player or player_idx < end_player
-    end)
-  end
+  defp generate_players_between(start_player, end_player, players_size)
+       when start_player > end_player,
+       do:
+         (Enum.to_list(0..end_player) ++ Enum.to_list(start_player..players_size)) --
+           [start_player, end_player]
 end
