@@ -19,13 +19,13 @@ defmodule CluelessCore.Answer do
       iex> answers = MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}, %Answer{cards: MapSet.new([:garage]), player: 2}])
       iex> answers_to_remove = MapSet.new([%Answer{cards: MapSet.new([:garage]), player: 2}])
       iex> answers = Answer.remove_answers(answers, answers_to_remove)
-      iex> MapSet.size(answers)
+      iex> Enum.count(answers)
       1
 
       iex> answers = MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}, %Answer{cards: MapSet.new([:garage]), player: 2}])
       iex> answers_to_remove = MapSet.new([%Answer{cards: MapSet.new([:kitchen]), player: 2}])
       iex> answers = Answer.remove_answers(answers, answers_to_remove)
-      iex> MapSet.size(answers)
+      iex> Enum.count(answers)
       2
   """
   def remove_answers(%MapSet{} = answers, %MapSet{} = answers_to_remove) do
@@ -39,12 +39,12 @@ defmodule CluelessCore.Answer do
 
       iex> answers = MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}, %Answer{cards: MapSet.new([:garage]), player: 2}])
       iex> found_answers = Answer.discover_cards_in_hand(answers)
-      iex> MapSet.size(found_answers)
+      iex> Enum.count(found_answers)
       1
   """
   def discover_cards_in_hand(%MapSet{} = answers) do
     MapSet.filter(answers, fn answer ->
-      MapSet.size(answer.cards) == 1
+      Enum.count(answer.cards) == 1
     end)
   end
 end
