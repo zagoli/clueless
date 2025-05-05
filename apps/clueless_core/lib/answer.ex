@@ -12,19 +12,39 @@ defmodule CluelessCore.Answer do
   defstruct ~w[cards player]a
 
   @doc """
-  Removes answers with less than two cards.
+  Remove answers from a set of answers.
+
+  ## Examples
+
+      iex> answers = MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}, %Answer{cards: MapSet.new([:garage]), player: 2}])
+      iex> answers_to_remove = MapSet.new([%Answer{cards: MapSet.new([:garage]), player: 2}])
+      iex> answers = Answer.remove_answers(answers, answers_to_remove)
+      iex> MapSet.size(answers)
+      1
+
+      iex> answers = MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}, %Answer{cards: MapSet.new([:garage]), player: 2}])
+      iex> answers_to_remove = MapSet.new([%Answer{cards: MapSet.new([:kitchen]), player: 2}])
+      iex> answers = Answer.remove_answers(answers, answers_to_remove)
+      iex> MapSet.size(answers)
+      2
+  """
+  def remove_answers(%MapSet{} = answers, %MapSet{} = answers_to_remove) do
+    MapSet.difference(answers, answers_to_remove)
+  end
+
+  @doc """
+  Find answers with only one card.
 
   ## Example
 
       iex> answers = MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}, %Answer{cards: MapSet.new([:garage]), player: 2}])
-      iex> answers = Answer.remove_exhausted_answers(answers)
-      iex> MapSet.size(answers)
+      iex> found_answers = Answer.discover_cards_in_hand(answers)
+      iex> MapSet.size(found_answers)
       1
-
   """
-  def remove_exhausted_answers(%MapSet{} = answers) do
-    MapSet.reject(answers, fn answer ->
-      MapSet.size(answer.cards) < 2
+  def discover_cards_in_hand(%MapSet{} = answers) do
+    MapSet.filter(answers, fn answer ->
+      MapSet.size(answer.cards) == 1
     end)
   end
 end
