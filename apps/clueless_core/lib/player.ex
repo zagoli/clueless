@@ -1,4 +1,4 @@
-defmodule CluelessCore.Players do
+defmodule CluelessCore.Player do
   @moduledoc """
   Clue game players. Only the player name is relevant for the game.
   """

@@ -1,4 +1,4 @@
-defmodule CluelessCore.Hands do
+defmodule CluelessCore.Hand do
   @moduledoc """
   This module contains the logic for managing hands in the game.
   """
