@@ -12,6 +12,41 @@ defmodule CluelessCore.Answer do
   defstruct ~w[cards player]a
 
   @doc """
+  Add a new answer to the set of answers.
+  If the answer contains a card that is already in the hand of the player, do nothing.
+
+  ## Examples
+
+      iex> cards = MapSet.new([:garage, :knife, :kitchen])
+      iex> player = 1
+      iex> answers = Answer.maybe_add_answer(MapSet.new(), cards, player, %{})
+      iex> Enum.count(answers)
+      1
+
+      iex> cards = MapSet.new([:garage, :knife, :kitchen])
+      iex> player = 1
+      iex> hands = %{1 => MapSet.new([:garage])}
+      iex> answers = Answer.maybe_add_answer(MapSet.new(), cards, player, hands)
+      iex> Enum.count(answers)
+      0
+  """
+  def maybe_add_answer(%MapSet{} = answers, %MapSet{} = cards, player, hands)
+      when is_integer(player) and is_map(hands) do
+    Map.get(hands, player, MapSet.new())
+    |> MapSet.intersection(cards)
+    |> Enum.empty?()
+    |> add_answer(answers, cards, player)
+  end
+
+  defp add_answer(true = _no_card_owned, %MapSet{} = answers, %MapSet{} = cards, player) do
+    MapSet.put(answers, %__MODULE__{cards: cards, player: player})
+  end
+
+  defp add_answer(false = _no_card_owned, %MapSet{} = answers, _, _) do
+    answers
+  end
+
+  @doc """
   Remove answers from a set of answers.
 
   ## Examples
