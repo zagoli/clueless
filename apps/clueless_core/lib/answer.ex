@@ -88,11 +88,11 @@ defmodule CluelessCore.Answer do
   For every answer, if some cards are in the absent cards set of that player, remove them from the answer.
   """
   def reduce_answers(%MapSet{} = answers, absent_cards) when is_map(absent_cards) do
-    Enum.map(answers, fn %__MODULE__{cards: cards, player: player} ->
+    for %__MODULE__{cards: cards, player: player} <- answers do
       player_absent_cards = Map.get(absent_cards, player, MapSet.new())
       new_absent_cards = MapSet.difference(cards, player_absent_cards)
       %__MODULE__{cards: new_absent_cards, player: player}
-    end)
+    end
     |> MapSet.new()
   end
 end
