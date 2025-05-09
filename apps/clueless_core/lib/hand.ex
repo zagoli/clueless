@@ -4,7 +4,6 @@ defmodule CluelessCore.Hand do
   """
   alias CluelessCore.ClueGame
   alias CluelessCore.AbsentCard
-  alias CluelessCore.Answer
   alias CluelessCore.Player
 
   @doc """
@@ -40,25 +39,9 @@ defmodule CluelessCore.Hand do
         card
       )
 
-    # TODO: EXTRACT METHOD
+    game = %{game | hands: hands, absent_cards: absent_cards}
 
-    answers = Answer.reduce_answers(game.answers, absent_cards)
-    discovered_answers = Answer.discover_cards_in_hand(answers)
-    answers = Answer.remove_answers(answers, discovered_answers)
-
-    game = %{game | hands: hands, absent_cards: absent_cards, answers: answers}
-
-    if not Enum.empty?(discovered_answers) do
-      Enum.reduce(discovered_answers, game, fn %Answer{cards: cards, player: player}, game ->
-        # every discovered answer has only a card
-        card = cards |> Enum.to_list() |> List.first()
-        add_card_to_hand(game, player, card)
-      end)
-    else
-      game
-    end
-
-    # END TODO: EXTRACT METHOD
+    ClueGame.advance_game(game)
   end
 
   defp add_card_to_player_hand(hands, player, card) do
