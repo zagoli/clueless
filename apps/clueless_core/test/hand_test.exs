@@ -10,8 +10,6 @@ defmodule CluelessCore.HandTest do
     test "adds a card and advance game" do
       game = %ClueGame{
         players: ["Mickey", "Goofy"],
-        hands: %{},
-        absent_cards: %{},
         answers: MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}])
       }
 

@@ -9,10 +9,7 @@ defmodule CluelessCore.ClueGameTest do
     setup do
       %{
         game: %ClueGame{
-          players: ["Mickey", "Goofy"],
-          hands: %{},
-          absent_cards: %{},
-          answers: MapSet.new()
+          players: ["Mickey", "Goofy"]
         }
       }
     end

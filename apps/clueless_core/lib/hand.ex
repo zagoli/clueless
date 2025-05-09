@@ -19,7 +19,7 @@ defmodule CluelessCore.Hand do
 
   ## Examples
 
-      iex> game = %ClueGame{hands: %{}, absent_cards: %{}, answers: MapSet.new(), players: ["Mickey", "Goofy"]}
+      iex> game = %ClueGame{players: ["Mickey", "Goofy"]}
       iex> add_card_to_hand(game, "Mickey", :garage)
       %ClueGame{hands: %{0 => MapSet.new([:garage])}, absent_cards: %{1 => MapSet.new([:garage])}, answers: MapSet.new(), players: ["Mickey", "Goofy"]}
   """

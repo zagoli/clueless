@@ -12,8 +12,11 @@ defmodule CluelessCore.Answer do
   defstruct ~w[cards player]a
 
   @doc """
-  Add a new answer to the set of answers.
+  Add a new answer to the set of answers. If the player who answered is `:nobody`, do nothing.
   If the answer contains a card that is already in the hand of the player, do nothing.
+
+  ## Returns
+  A `MapSet` of answers with the new answer added if the player does not own any of the cards in the answer.
 
   ## Examples
 
@@ -29,7 +32,18 @@ defmodule CluelessCore.Answer do
       iex> answers = Answer.maybe_add_answer(MapSet.new(), cards, player, hands)
       iex> Enum.count(answers)
       0
+
+      iex> cards = MapSet.new([:garage, :knife, :kitchen])
+      iex> player = :nobody
+      iex> hands = %{1 => MapSet.new([:garage])}
+      iex> answers = Answer.maybe_add_answer(MapSet.new(), cards, player, hands)
+      iex> Enum.count(answers)
+      0
   """
+  def maybe_add_answer(%MapSet{} = answers, _, :nobody, _) do
+    answers
+  end
+
   def maybe_add_answer(%MapSet{} = answers, %MapSet{} = cards, player, hands)
       when is_integer(player) and is_map(hands) do
     Map.get(hands, player, MapSet.new())

@@ -6,6 +6,9 @@ defmodule CluelessCore.AbsentCard do
   @doc """
     Adds a card or set of cards to the set of absent cards for a player or a list of players.
 
+    ## Returns
+    The updated map of absent cards, where each key is a player ID and the value is a `MapSet` of absent cards.
+
     ## Examples
 
       iex> absent_cards = %{1 => MapSet.new([:knife])}
