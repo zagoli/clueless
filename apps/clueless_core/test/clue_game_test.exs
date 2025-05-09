@@ -56,5 +56,26 @@ defmodule CluelessCore.ClueGameTest do
       assert game.hands[0] |> Enum.to_list() == [:garage, :kitchen]
       assert game.hands[1] |> Enum.to_list() == [:knife]
     end
+
+    test "can discover cards from multiple sources (added question, added card) recursively", %{
+      game: game
+    } do
+      players = ["Mickey", "Goofy", "Donald"]
+
+      answers =
+        MapSet.new([
+          %Answer{player: 1, cards: MapSet.new([:garage, :kitchen, :plum])},
+          %Answer{player: 1, cards: MapSet.new([:bedroom, :gun])},
+          %Answer{player: 2, cards: MapSet.new([:plum, :gun])}
+        ])
+
+      absent_cards = %{1 => MapSet.new([:garage, :kitchen, :bathroom])}
+      game = %{game | players: players, answers: answers, absent_cards: absent_cards}
+
+      game = ClueGame.advance_game(game)
+
+      assert game.hands[1] |> Enum.to_list() == [:plum, :bedroom]
+      assert game.hands[2] |> Enum.to_list() == [:gun]
+    end
   end
 end
