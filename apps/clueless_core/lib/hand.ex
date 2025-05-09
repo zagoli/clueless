@@ -46,12 +46,16 @@ defmodule CluelessCore.Hand do
     discovered_answers = Answer.discover_cards_in_hand(answers)
     answers = Answer.remove_answers(answers, discovered_answers)
 
+    game = %{game | hands: hands, absent_cards: absent_cards, answers: answers}
+
     if not Enum.empty?(discovered_answers) do
       Enum.reduce(discovered_answers, game, fn %Answer{cards: cards, player: player}, game ->
-        add_card_to_hand(game, player, cards)
+        # every discovered answer has only a card
+        card = cards |> Enum.to_list() |> List.first()
+        add_card_to_hand(game, player, card)
       end)
     else
-      %{game | hands: hands, absent_cards: absent_cards, answers: answers}
+      game
     end
 
     # END TODO: EXTRACT METHOD
