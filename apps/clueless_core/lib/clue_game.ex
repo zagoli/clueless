@@ -11,6 +11,29 @@ defmodule CluelessCore.ClueGame do
   defstruct hands: %{}, absent_cards: %{}, answers: MapSet.new(), players: 0
 
   @doc """
+  Creates a new game with the specified number of players.
+
+  ## Examples
+
+      iex> ClueGame.new(2)
+      %ClueGame{players: 2, hands: %{0 => MapSet.new(), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new()}, answers: MapSet.new()}
+  """
+  def new(players) when is_integer(players) and players > 0 do
+    %__MODULE__{
+      players: players,
+      hands: init_player_map(players),
+      absent_cards: init_player_map(players),
+      answers: MapSet.new()
+    }
+  end
+
+  defp init_player_map(players) do
+    0..(players - 1)
+    |> Enum.map(fn player -> {player, MapSet.new()} end)
+    |> Enum.into(%{})
+  end
+
+  @doc """
   Advances the game state by processing the answers and updating the players' hands and absent cards sets.
   """
   def advance_game(game) do
@@ -29,5 +52,32 @@ defmodule CluelessCore.ClueGame do
     else
       game
     end
+  end
+
+  @doc """
+  Returns a list of cards that are certainly present in the envelope in a certain point of the game.
+  A card is considered present in the envelope if it is not present in any player's hand (it is present in every player absent cards set).
+
+  ## Examples
+
+      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}
+      iex> get_envelope_content(absent_cards)
+      [:garage]
+
+      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife])}
+      iex> get_envelope_content(absent_cards)
+      []
+
+      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new()}
+      iex> get_envelope_content(absent_cards)
+      []
+  """
+  def get_envelope_content(absent_cards) when is_map(absent_cards) do
+    absent_cards
+    |> Map.values()
+    |> Enum.reduce(fn envelope, absent_for_player ->
+      MapSet.intersection(envelope, absent_for_player)
+    end)
+    |> Enum.to_list()
   end
 end

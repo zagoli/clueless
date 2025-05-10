@@ -19,9 +19,9 @@ defmodule CluelessCore.Hand do
 
   ## Examples
 
-      iex> game = %ClueGame{players: 2}
+      iex> game = ClueGame.new(2)
       iex> add_card_to_hand(game, 0, :garage)
-      %ClueGame{hands: %{0 => MapSet.new([:garage])}, absent_cards: %{1 => MapSet.new([:garage])}, answers: MapSet.new(), players: 2}
+      %ClueGame{hands: %{0 => MapSet.new([:garage]), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new([:garage])}, answers: MapSet.new(), players: 2}
   """
   def add_card_to_hand(%ClueGame{} = game, player, card)
       when is_integer(player) and is_atom(card) do

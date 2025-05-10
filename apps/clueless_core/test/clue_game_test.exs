@@ -1,16 +1,15 @@
 defmodule CluelessCore.ClueGameTest do
   use ExUnit.Case, async: true
+  import CluelessCore.ClueGame
   alias CluelessCore.ClueGame
   alias CluelessCore.Answer
 
-  doctest CluelessCore.ClueGame
+  doctest ClueGame
 
   describe "advance_game/1" do
     setup do
       %{
-        game: %ClueGame{
-          players: 2
-        }
+        game: ClueGame.new(2)
       }
     end
 
