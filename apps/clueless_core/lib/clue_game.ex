@@ -61,18 +61,18 @@ defmodule CluelessCore.ClueGame do
   ## Examples
 
       iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}
-      iex> get_envelope_content(absent_cards)
+      iex> envelope_cards(absent_cards)
       [:garage]
 
       iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife])}
-      iex> get_envelope_content(absent_cards)
+      iex> envelope_cards(absent_cards)
       []
 
       iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new()}
-      iex> get_envelope_content(absent_cards)
+      iex> envelope_cards(absent_cards)
       []
   """
-  def get_envelope_content(absent_cards) when is_map(absent_cards) do
+  def envelope_cards(absent_cards) when is_map(absent_cards) do
     absent_cards
     |> Map.values()
     |> Enum.reduce(fn envelope, absent_for_player ->
