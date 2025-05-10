@@ -80,4 +80,25 @@ defmodule CluelessCore.ClueGame do
     end)
     |> Enum.to_list()
   end
+
+  @doc """
+  Returns a keyword list of cards with the number of times they are present in an absent set.
+
+  ## Example
+
+      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}
+      iex> cards_suspect_score(absent_cards)
+      [garage: 2, knife: 1]
+
+      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife])}
+      iex> cards_suspect_score(absent_cards)
+      [garage: 1, knife: 1]
+  """
+  def cards_suspect_score(absent_cards) when is_map(absent_cards) do
+    absent_cards
+    |> Map.values()
+    |> Enum.flat_map(&Enum.to_list(&1))
+    |> Enum.frequencies()
+    |> Enum.to_list()
+  end
 end
