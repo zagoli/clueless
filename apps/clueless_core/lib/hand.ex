@@ -19,15 +19,10 @@ defmodule CluelessCore.Hand do
 
   ## Examples
 
-      iex> game = %ClueGame{players: ["Mickey", "Goofy"]}
-      iex> add_card_to_hand(game, "Mickey", :garage)
-      %ClueGame{hands: %{0 => MapSet.new([:garage])}, absent_cards: %{1 => MapSet.new([:garage])}, answers: MapSet.new(), players: ["Mickey", "Goofy"]}
+      iex> game = %ClueGame{players: 2}
+      iex> add_card_to_hand(game, 0, :garage)
+      %ClueGame{hands: %{0 => MapSet.new([:garage])}, absent_cards: %{1 => MapSet.new([:garage])}, answers: MapSet.new(), players: 2}
   """
-  def add_card_to_hand(%ClueGame{} = game, player, card)
-      when is_binary(player) and is_atom(card) do
-    add_card_to_hand(game, Player.get_player_index(game.players, player), card)
-  end
-
   def add_card_to_hand(%ClueGame{} = game, player, card)
       when is_integer(player) and is_atom(card) do
     hands = add_card_to_player_hand(game.hands, player, card)
@@ -63,19 +58,19 @@ defmodule CluelessCore.Hand do
 
   ## Examples
 
-      iex> hands = %{"player1" => [:garage, :kitchen], "player2" => [:knife]}
-      iex> in_hand?(hands, "player1", :garage)
+      iex> hands = %{0 => [:garage, :kitchen], 1 => [:knife]}
+      iex> in_hand?(hands, 0, :garage)
       true
 
-      iex> hands = %{"player1" => [:garage, :kitchen], "player2" => [:knife]}
-      iex> in_hand?(hands, "player1", :knife)
+      iex> hands = %{0 => [:garage, :kitchen], 1 => [:knife]}
+      iex> in_hand?(hands, 0, :knife)
       false
 
-      iex> hands = %{"player1" => [:garage, :kitchen], "player2" => [:knife]}
-      iex> in_hand?(hands, "player3", :garage)
+      iex> hands = %{0 => [:garage, :kitchen], 1 => [:knife]}
+      iex> in_hand?(hands, 2, :garage)
       false
   """
-  def in_hand?(hands, player, card) when is_map(hands) and is_binary(player) and is_atom(card) do
+  def in_hand?(hands, player, card) when is_map(hands) and is_integer(player) and is_atom(card) do
     case hands[player] do
       nil -> false
       hand -> Enum.member?(hand, card)

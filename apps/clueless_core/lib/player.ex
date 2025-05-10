@@ -1,67 +1,47 @@
 defmodule CluelessCore.Player do
   @moduledoc """
-  Clue game players. Only the player name is relevant for the game.
+  Clue game players. Only the number of players is stored in the game state.
+  Players are represented by their number: the first player is 0, the second player is 1, and so on.
   """
-
-  @doc """
-  Returns the player index in the list of players.
-
-  ## Examples
-
-      iex> get_player_index(["Alice", "Bob", "Charlie"], "Bob")
-      1
-
-      iex> get_player_index(["Alice", "Bob", "Charlie"], "Dave")
-      nil
-
-  """
-  def get_player_index(players, player) when is_binary(player) and is_list(players),
-    do: Enum.find_index(players, &(&1 == player))
 
   @doc """
   Returns the indices of the players between two players in a circular list. Extremes are excluded.
 
   ## Examples
 
-      iex> players_between(["Alice", "Bob", "Charlie"], "Alice", "Charlie")
+      iex> players_between(3, 0, 2)
       [1]
 
-      iex> players_between(["Alice", "Bob", "Charlie"], 0, 2)
+      iex> players_between(3, 0, 2)
       [1]
 
-      iex> players_between(["Alice", "Bob", "Charlie"], "Charlie", "Bob")
+      iex> players_between(3, 2, 1)
       [0]
 
-      iex> players_between(["Alice", "Bob", "Charlie"], "Charlie", "Alice")
+      iex> players_between(3, 2, 0)
       []
 
-      iex> players_between(["Alice", "Bob", "Charlie"], "Alice", "Alice")
+      iex> players_between(3, 0, 0)
       [1, 2]
 
-      iex> players_between(["Alice", "Bob", "Charlie"], "Alice", "Bob")
+      iex> players_between(3, 0, 1)
       []
 
-      iex> players_between(["Alice", "Bob", "Charlie"], "Alice", "Dave")
+      iex> players_between(3, 0, 3)
       []
 
-      iex> players_between(["Alice", "Bob", "Charlie"], -1, 4)
+      iex> players_between(3, -1, 4)
       []
   """
-  def players_between(players, start_player, end_player)
-      when is_list(players) and is_binary(start_player) and is_binary(end_player) do
-    start_index = get_player_index(players, start_player)
-    end_index = get_player_index(players, end_player)
-    players_between(players, start_index, end_index)
-  end
 
-  def players_between(_players, start_player, end_player)
+  def players_between(_players_number, start_player, end_player)
       when is_nil(start_player) or is_nil(end_player) do
     []
   end
 
-  def players_between(players, start_player, end_player)
-      when is_list(players) do
-    players_size = Enum.count(players) - 1
+  def players_between(players_number, start_player, end_player)
+      when is_integer(players_number) and is_integer(start_player) and is_integer(end_player) do
+    players_size = players_number - 1
 
     cond do
       start_player < 0 or end_player < 0 ->

@@ -9,7 +9,7 @@ defmodule CluelessCore.ClueGameTest do
     setup do
       %{
         game: %ClueGame{
-          players: ["Mickey", "Goofy"]
+          players: 2
         }
       }
     end
@@ -60,7 +60,7 @@ defmodule CluelessCore.ClueGameTest do
     test "can discover cards from multiple sources (added question, added card) recursively", %{
       game: game
     } do
-      players = ["Mickey", "Goofy", "Donald"]
+      players = 3
 
       answers =
         MapSet.new([

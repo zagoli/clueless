@@ -9,11 +9,11 @@ defmodule CluelessCore.HandTest do
   describe "add_card_to_hand/3" do
     test "adds a card and advance game" do
       game = %ClueGame{
-        players: ["Mickey", "Goofy"],
+        players: 2,
         answers: MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}])
       }
 
-      game = add_card_to_hand(game, "Mickey", :garage)
+      game = add_card_to_hand(game, 0, :garage)
 
       # Used all answers
       assert Enum.empty?(game.answers)

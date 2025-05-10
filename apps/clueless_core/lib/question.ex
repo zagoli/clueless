@@ -9,11 +9,11 @@ defmodule CluelessCore.Question do
 
   @doc """
   A question asked by a player in his turn.
-  asked_by: the name of the player who asked the question
-  answered_by: the name of the player who answered the question or :nobody
+  asked_by: the index of the player who asked the question
+  answered_by: the index of the player who answered the question or :nobody
   cards: a %MapSet{} of cards that were asked
   """
-  defstruct asked_by: "", answered_by: :nobody, cards: MapSet.new()
+  defstruct asked_by: 0, answered_by: :nobody, cards: MapSet.new()
 
   @doc """
   Adds a question to the game and updates the game state accordingly.
@@ -26,10 +26,8 @@ defmodule CluelessCore.Question do
   - `CluelessCore.ClueGame`: The updated game state with the new question added.
   """
   def add_question(%ClueGame{} = game, %__MODULE__{} = question) do
-    player_who_answered = who_answered?(game.players, question.answered_by)
-
     answers =
-      Answer.maybe_add_answer(game.answers, question.cards, player_who_answered, game.hands)
+      Answer.maybe_add_answer(game.answers, question.cards, question.answered_by, game.hands)
 
     absent_cards =
       add_to_absent(
@@ -44,9 +42,6 @@ defmodule CluelessCore.Question do
 
     ClueGame.advance_game(game)
   end
-
-  defp who_answered?(_, :nobody), do: :nobody
-  defp who_answered?(players, answered_by), do: Player.get_player_index(players, answered_by)
 
   defp add_to_absent(absent_cards, players, asked_by, :nobody, cards_to_add) do
     players = Player.players_between(players, asked_by, asked_by)
