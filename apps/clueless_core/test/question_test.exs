@@ -10,7 +10,6 @@ defmodule CluelessCore.QuestionTest do
     test "adds a question and advances the game" do
       game = %ClueGame{
         players: ["Alice", "Bob", "Terry"],
-        questions: [],
         answers: MapSet.new([%Answer{player: 1, cards: MapSet.new([:knife, :garage, :kitchen])}])
       }
 
@@ -22,8 +21,6 @@ defmodule CluelessCore.QuestionTest do
 
       game = Question.add_question(game, question)
 
-      # Question added
-      assert Question.get_questions(game) |> Enum.count() == 1
       # The game advanced
       assert game.hands[1] |> Enum.to_list() == [:garage]
     end

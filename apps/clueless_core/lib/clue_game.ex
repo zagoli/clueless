@@ -8,7 +8,7 @@ defmodule CluelessCore.ClueGame do
   @doc """
   A struct representing the state of a Clue game.
   """
-  defstruct hands: %{}, absent_cards: %{}, questions: [], answers: MapSet.new(), players: []
+  defstruct hands: %{}, absent_cards: %{}, answers: MapSet.new(), players: []
 
   @doc """
   Advances the game state by processing the answers and updating the players' hands and absent cards sets.

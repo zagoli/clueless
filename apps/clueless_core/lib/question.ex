@@ -24,18 +24,8 @@ defmodule CluelessCore.Question do
 
   ## Returns
   - `CluelessCore.ClueGame`: The updated game state with the new question added.
-
-  ## Example
-
-      iex> game = %ClueGame{players: ["Alice", "Bob"]}
-      iex> question = %Question{asked_by: "Alice", answered_by: "Bob", cards: MapSet.new([:knife])}
-      iex> game = Question.add_question(game, question)
-      iex> Question.get_questions(game)
-      [%Question{asked_by: "Alice", answered_by: "Bob", cards: MapSet.new([:knife])}]
   """
   def add_question(%ClueGame{} = game, %__MODULE__{} = question) do
-    questions = [question | game.questions]
-
     player_who_answered = who_answered?(game.players, question.answered_by)
 
     answers =
@@ -50,22 +40,9 @@ defmodule CluelessCore.Question do
         question.cards
       )
 
-    game = %{game | questions: questions, answers: answers, absent_cards: absent_cards}
+    game = %{game | answers: answers, absent_cards: absent_cards}
 
     ClueGame.advance_game(game)
-  end
-
-  @doc """
-  Returns the list of questions asked in the game.
-
-  ## Examples
-
-      iex> game = %ClueGame{questions: [%Question{asked_by: "Alice", answered_by: "Bob", cards: MapSet.new([:knife])}]}
-      iex> Question.get_questions(game)
-      [%Question{asked_by: "Alice", answered_by: "Bob", cards: MapSet.new([:knife])}]
-  """
-  def get_questions(%ClueGame{} = game) do
-    game.questions
   end
 
   defp who_answered?(_, :nobody), do: :nobody
