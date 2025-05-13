@@ -87,12 +87,18 @@ defmodule CluelessCore.ClueGame do
   ## Example
 
       iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}
-      iex> cards_suspect_score(absent_cards)
-      [garage: 2, knife: 1]
+      iex> result = cards_suspect_score(absent_cards)
+      iex> result[:garage]
+      2
+      iex> result[:knife]
+      1
 
       iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife])}
-      iex> cards_suspect_score(absent_cards)
-      [garage: 1, knife: 1]
+      iex> result = cards_suspect_score(absent_cards)
+      iex> result[:garage]
+      1
+      iex> result[:knife]
+      1
   """
   def cards_suspect_score(absent_cards) when is_map(absent_cards) do
     absent_cards

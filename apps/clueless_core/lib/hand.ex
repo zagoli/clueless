@@ -40,13 +40,9 @@ defmodule CluelessCore.Hand do
   end
 
   defp add_card_to_player_hand(hands, player, card) do
-    {_, hands} =
-      Map.get_and_update(hands, player, fn
-        nil -> {nil, MapSet.new([card])}
-        hand -> {hand, MapSet.put(hand, card)}
-      end)
-
-    hands
+    Map.update(hands, player, MapSet.new([card]), fn
+      hand -> MapSet.put(hand, card)
+    end)
   end
 
   @doc """
