@@ -44,32 +44,4 @@ defmodule CluelessCore.Hand do
       hand -> MapSet.put(hand, card)
     end)
   end
-
-  @doc """
-  Checks if a specific card is present in a player's hand.
-
-  ## Returns
-    - `true` if the card is in the player's hand
-    - `false` if the player doesn't exist or doesn't have the card
-
-  ## Examples
-
-      iex> hands = %{0 => [:garage, :kitchen], 1 => [:knife]}
-      iex> in_hand?(hands, 0, :garage)
-      true
-
-      iex> hands = %{0 => [:garage, :kitchen], 1 => [:knife]}
-      iex> in_hand?(hands, 0, :knife)
-      false
-
-      iex> hands = %{0 => [:garage, :kitchen], 1 => [:knife]}
-      iex> in_hand?(hands, 2, :garage)
-      false
-  """
-  def in_hand?(hands, player, card) when is_map(hands) and is_integer(player) and is_atom(card) do
-    case hands[player] do
-      nil -> false
-      hand -> Enum.member?(hand, card)
-    end
-  end
 end
