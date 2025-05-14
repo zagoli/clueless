@@ -1,10 +1,6 @@
 defmodule CluelessWeb.AddCardControllerTest do
   use CluelessWeb.ConnCase, async: true
-
-  defp create_game(%{conn: conn}) do
-    conn = post(conn, ~p"/api/new_game", players: 3)
-    %{conn: conn}
-  end
+  import CluelessWeb.GameFixtures
 
   describe "POST add_card" do
     setup [:create_game]
