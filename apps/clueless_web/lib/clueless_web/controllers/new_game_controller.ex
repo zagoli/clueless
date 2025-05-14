@@ -6,7 +6,6 @@ defmodule CluelessWeb.NewGameController do
     game = ClueGame.new(players_count)
 
     conn
-    |> fetch_session()
     |> put_session(:game, game)
     |> put_resp_content_type("text/plain")
     |> send_resp(201, "")

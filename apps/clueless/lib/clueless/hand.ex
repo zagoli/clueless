@@ -24,7 +24,7 @@ defmodule Clueless.Hand do
       %ClueGame{hands: %{0 => MapSet.new([:garage]), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new([:garage])}, answers: MapSet.new(), players: 2}
   """
   def add_card_to_hand(%ClueGame{} = game, player, card)
-      when is_integer(player) and is_atom(card) do
+      when is_integer(player) do
     hands = add_card_to_player_hand(game.hands, player, card)
 
     absent_cards =

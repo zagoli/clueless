@@ -3,11 +3,13 @@ defmodule CluelessWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
   end
 
   scope "/api", CluelessWeb do
     pipe_through :api
 
     post "/new_game", NewGameController, :new_game
+    post "/add_card", AddCardController, :add_card
   end
 end

@@ -65,7 +65,7 @@ defmodule Clueless.AbsentCard do
   end
 
   def add_card_to_absent(absent_cards, player, card)
-      when is_integer(player) and is_map(absent_cards) and is_atom(card) do
+      when is_integer(player) and is_map(absent_cards) do
     Map.update(absent_cards, player, MapSet.new([card]), fn
       cards -> MapSet.put(cards, card)
     end)
