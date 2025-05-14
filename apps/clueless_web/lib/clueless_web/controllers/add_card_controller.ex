@@ -2,7 +2,7 @@ defmodule CluelessWeb.AddCardController do
   use CluelessWeb, :controller
   alias Clueless.Hand
 
-  plug :put_view, CluelessWeb.ClueGameHintsJson
+  plug :put_view, CluelessWeb.ClueGameHintsJSON
 
   def(
     add_card(conn, %{"card" => card, "player" => player})

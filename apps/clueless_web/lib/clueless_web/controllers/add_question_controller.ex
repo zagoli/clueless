@@ -2,7 +2,7 @@ defmodule CluelessWeb.AddQuestionController do
   use CluelessWeb, :controller
   alias Clueless.Question
 
-  plug :put_view, CluelessWeb.ClueGameHintsJson
+  plug :put_view, CluelessWeb.ClueGameHintsJSON
 
   def add_question(conn, %{"asked_by" => asked_by, "answered_by" => answered_by, "cards" => cards})
       when is_integer(asked_by) and is_number(answered_by) and is_list(cards) do

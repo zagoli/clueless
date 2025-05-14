@@ -1,4 +1,4 @@
-defmodule CluelessWeb.ClueGameHintsJson do
+defmodule CluelessWeb.ClueGameHintsJSON do
   alias Clueless.ClueGame
 
   def clue_game_hints(%{new_game: new_game, old_game: old_game}) do
