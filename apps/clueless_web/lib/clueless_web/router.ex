@@ -7,5 +7,7 @@ defmodule CluelessWeb.Router do
 
   scope "/api", CluelessWeb do
     pipe_through :api
+
+    post "/new_game", NewGameController, :new_game
   end
 end
