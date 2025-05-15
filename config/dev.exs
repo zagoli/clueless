@@ -14,9 +14,7 @@ config :clueless_web, CluelessWeb.Endpoint,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: "yCeyCpSfXCr+w/0fdmZFO7GEV417kLGafUs1zH0QMG/BsskNJtgUIZylDsHkp6DN",
-  watchers: [
-    esbuild: {Esbuild, :install_and_run, [:clueless_web, ~w(--sourcemap=inline --watch)]}
-  ]
+  watchers: []
 
 # ## SSL Support
 #

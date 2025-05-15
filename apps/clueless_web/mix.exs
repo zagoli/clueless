@@ -9,7 +9,7 @@ defmodule CluelessWeb.MixProject do
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.14",
+      elixir: "~> 1.18",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -37,7 +37,6 @@ defmodule CluelessWeb.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.7.21"},
-      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.26"},
@@ -52,13 +51,7 @@ defmodule CluelessWeb.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "assets.setup", "assets.build"],
-      "assets.setup": ["esbuild.install --if-missing"],
-      "assets.build": ["esbuild clueless_web"],
-      "assets.deploy": [
-        "esbuild clueless_web --minify",
-        "phx.digest"
-      ]
+      setup: ["deps.get"]
     ]
   end
 end
