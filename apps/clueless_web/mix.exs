@@ -42,7 +42,8 @@ defmodule CluelessWeb.MixProject do
       {:gettext, "~> 0.26"},
       {:clueless, in_umbrella: true},
       {:jason, "~> 1.2"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:corsica, "~> 2.1"}
     ]
   end
 
