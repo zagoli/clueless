@@ -8,14 +8,16 @@ defmodule CluelessWeb.Endpoint do
     store: :cookie,
     key: "_clueless_web_key",
     signing_salt: "c/R5dcLs",
-    same_site: "Lax"
+    same_site: "None",
+    secure: true,
+    encryption_salt: "c/A5FFLs"
   ]
 
   # socket "/live", Phoenix.LiveView.Socket,
   #   websocket: [connect_info: [session: @session_options]],
   #   longpoll: [connect_info: [session: @session_options]]
 
-  plug Corsica, origins: "*", allow_credentials: true
+  plug Corsica, origins: "*", allow_credentials: true, allow_headers: :all
 
   # Serve at "/" the static files from "priv/static" directory.
   #
