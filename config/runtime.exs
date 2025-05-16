@@ -34,9 +34,9 @@ if config_env() == :prod do
   #
   # If you are doing OTP releases, you need to instruct Phoenix
   # to start each relevant endpoint:
-  #
-  #     config :clueless_web, CluelessWeb.Endpoint, server: true
-  #
+
+  config :clueless_web, CluelessWeb.Endpoint, server: true
+
   # Then you can assemble a release by calling `mix release`.
   # See `mix help release` for more information.
 
