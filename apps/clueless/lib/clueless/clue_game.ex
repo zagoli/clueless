@@ -36,7 +36,7 @@ defmodule Clueless.ClueGame do
   @doc """
   Advances the game state by processing the answers and updating the players' hands and absent cards sets.
   """
-  def advance_game(game) do
+  def advance_game(%__MODULE__{} = game) do
     answers = Answer.reduce_answers(game.answers, game.absent_cards)
     discovered_answers = Answer.discover_cards_in_hand(answers)
     answers = Answer.remove_answers(answers, discovered_answers)
@@ -83,29 +83,32 @@ defmodule Clueless.ClueGame do
 
   @doc """
   Returns a keyword list of cards with the number of times they are present in an absent set.
-  If a card is in the envelop, it is not included.
+  If a card is in the envelope or in a hand, it is not included.
 
   ## Example
 
       iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}
-      iex> result = cards_suspect_score(absent_cards)
+      iex> result = cards_suspect_score(%ClueGame{absent_cards: absent_cards})
       iex> result[:knife]
       1
 
       iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife]), 2 => MapSet.new([:knife])}
-      iex> result = cards_suspect_score(absent_cards)
-      iex> result[:garage]
-      1
+      iex> hands = %{2 => MapSet.new([:garage])}
+      iex> result = cards_suspect_score(%ClueGame{absent_cards: absent_cards, hands: hands})
       iex> result[:knife]
       2
+      iex> result[:garage]
+      nil
   """
-  def cards_suspect_score(absent_cards) when is_map(absent_cards) do
-    envelope = envelope_cards(absent_cards)
+  def cards_suspect_score(%__MODULE__{} = game) do
+    envelope = envelope_cards(game.absent_cards)
+    hands = game.hands |> Map.values() |> Enum.reduce(MapSet.new(), &MapSet.union(&1, &2))
 
-    absent_cards
+    game.absent_cards
     |> Map.values()
     |> Enum.flat_map(&Enum.to_list(&1))
     |> Enum.reject(&(&1 in envelope))
+    |> Enum.reject(&(&1 in hands))
     |> Enum.frequencies()
     |> Enum.to_list()
   end
