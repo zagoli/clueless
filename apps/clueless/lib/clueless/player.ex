@@ -68,4 +68,20 @@ defmodule Clueless.Player do
        do:
          (Enum.to_list(0..end_player) ++ Enum.to_list(start_player..players_size)) --
            [start_player, end_player]
+
+  @doc """
+  Returns a list of all players in the game.
+
+  ## Examples
+
+      iex> all_players(3)
+      [0, 1, 2]
+
+      iex> all_players(5)
+      [0, 1, 2, 3, 4]
+  """
+  def all_players(players_number)
+      when is_integer(players_number) and players_number > 0 do
+    Enum.to_list(0..(players_number - 1))
+  end
 end

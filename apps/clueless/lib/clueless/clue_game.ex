@@ -8,7 +8,11 @@ defmodule Clueless.ClueGame do
   @doc """
   A struct representing the state of a Clue game.
   """
-  defstruct hands: %{}, absent_cards: %{}, answers: MapSet.new(), players: 0
+  defstruct hands: %{},
+            absent_cards: %{},
+            answers: MapSet.new(),
+            revealed_cards: MapSet.new(),
+            players: 0
 
   @doc """
   Creates a new game with the specified number of players.
@@ -16,14 +20,13 @@ defmodule Clueless.ClueGame do
   ## Examples
 
       iex> ClueGame.new(2)
-      %ClueGame{players: 2, hands: %{0 => MapSet.new(), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new()}, answers: MapSet.new()}
+      %ClueGame{players: 2, hands: %{0 => MapSet.new(), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new()}, answers: MapSet.new(), revealed_cards: MapSet.new()}
   """
   def new(players) when is_integer(players) and players > 0 do
     %__MODULE__{
       players: players,
       hands: init_player_map(players),
-      absent_cards: init_player_map(players),
-      answers: MapSet.new()
+      absent_cards: init_player_map(players)
     }
   end
 
