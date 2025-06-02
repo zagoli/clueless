@@ -1,6 +1,5 @@
 defmodule Clueless.ClueGameTest do
   use ExUnit.Case, async: true
-  import Clueless.ClueGame
   alias Clueless.ClueGame
   alias Clueless.Answer
 

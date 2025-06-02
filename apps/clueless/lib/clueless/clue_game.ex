@@ -59,53 +59,59 @@ defmodule Clueless.ClueGame do
 
   @doc """
   Returns a list of cards that are certainly present in the envelope in a certain point of the game.
-  A card is considered present in the envelope if it is not present in any player's hand (it is present in every player absent cards set).
+  A card is considered present in the envelope if it is not present in any player's hand (it is present in every player absent cards set),
+  but it is not a revealed card.
 
   ## Examples
 
-      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}
-      iex> envelope_cards(absent_cards)
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}, revealed_cards: MapSet.new()}
+      iex> ClueGame.envelope_cards(game)
       [:garage]
 
-      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife])}
-      iex> envelope_cards(absent_cards)
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife])}, revealed_cards: MapSet.new()}
+      iex> ClueGame.envelope_cards(game)
       []
 
-      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new()}
-      iex> envelope_cards(absent_cards)
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new()}, revealed_cards: MapSet.new()}
+      iex> ClueGame.envelope_cards(game)
+      []
+
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage])}, revealed_cards: MapSet.new([:garage])}
+      iex> ClueGame.envelope_cards(game)
       []
   """
-  def envelope_cards(absent_cards) when is_map(absent_cards) do
-    absent_cards
+  def envelope_cards(%__MODULE__{} = game) do
+    game.absent_cards
     |> Map.values()
     |> Enum.reduce(fn envelope, absent_for_player ->
       MapSet.intersection(envelope, absent_for_player)
     end)
     |> Enum.to_list()
+    |> Enum.reject(&(&1 in game.revealed_cards))
   end
 
   @doc """
   Returns a keyword list of cards with the number of times they are present in an absent set.
-  If a card is in the envelop, it is not included.
+  If a card is in the envelope, it is not included.
 
   ## Example
 
-      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}
-      iex> result = cards_suspect_score(absent_cards)
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}, revealed_cards: MapSet.new()}
+      iex> result = ClueGame.cards_suspect_score(game)
       iex> result[:knife]
       1
 
-      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife]), 2 => MapSet.new([:knife])}
-      iex> result = cards_suspect_score(absent_cards)
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife]), 2 => MapSet.new([:knife])}, revealed_cards: MapSet.new()}
+      iex> result = ClueGame.cards_suspect_score(game)
       iex> result[:garage]
       1
       iex> result[:knife]
       2
   """
-  def cards_suspect_score(absent_cards) when is_map(absent_cards) do
-    envelope = envelope_cards(absent_cards)
+  def cards_suspect_score(%__MODULE__{} = game) do
+    envelope = envelope_cards(game)
 
-    absent_cards
+    game.absent_cards
     |> Map.values()
     |> Enum.flat_map(&Enum.to_list(&1))
     |> Enum.reject(&(&1 in envelope))

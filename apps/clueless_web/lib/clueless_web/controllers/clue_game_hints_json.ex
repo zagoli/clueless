@@ -7,7 +7,7 @@ defmodule CluelessWeb.ClueGameHintsJSON do
         hands: difference(new_game.hands, old_game.hands),
         absent_cards: difference(new_game.absent_cards, old_game.absent_cards)
       },
-      envelope: ClueGame.envelope_cards(new_game.absent_cards)
+      envelope: ClueGame.envelope_cards(new_game)
     }
   end
 
