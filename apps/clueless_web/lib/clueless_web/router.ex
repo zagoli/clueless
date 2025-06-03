@@ -12,6 +12,7 @@ defmodule CluelessWeb.Router do
     get "/ping", PingController, :ping
     post "/new_game", NewGameController, :new_game
     post "/add_card", AddCardController, :add_card
+    post "/reveal_card", RevealCardController, :reveal_card
     post "/add_question", AddQuestionController, :add_question
     get "/suggestions", SuggestionsController, :suggestions
   end

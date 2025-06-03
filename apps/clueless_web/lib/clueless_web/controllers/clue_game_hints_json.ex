@@ -5,9 +5,11 @@ defmodule CluelessWeb.ClueGameHintsJSON do
     %{
       diff: %{
         hands: difference(new_game.hands, old_game.hands),
-        absent_cards: difference(new_game.absent_cards, old_game.absent_cards)
+        absent_cards: difference(new_game.absent_cards, old_game.absent_cards),
+        revealed_cards:
+          MapSet.difference(new_game.revealed_cards, old_game.revealed_cards) |> Enum.to_list()
       },
-      envelope: ClueGame.envelope_cards(new_game.absent_cards)
+      envelope: ClueGame.envelope_cards(new_game)
     }
   end
 

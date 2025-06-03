@@ -8,7 +8,11 @@ defmodule Clueless.ClueGame do
   @doc """
   A struct representing the state of a Clue game.
   """
-  defstruct hands: %{}, absent_cards: %{}, answers: MapSet.new(), players: 0
+  defstruct hands: %{},
+            absent_cards: %{},
+            answers: MapSet.new(),
+            revealed_cards: MapSet.new(),
+            players: 0
 
   @doc """
   Creates a new game with the specified number of players.
@@ -16,14 +20,13 @@ defmodule Clueless.ClueGame do
   ## Examples
 
       iex> ClueGame.new(2)
-      %ClueGame{players: 2, hands: %{0 => MapSet.new(), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new()}, answers: MapSet.new()}
+      %ClueGame{players: 2, hands: %{0 => MapSet.new(), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new()}, answers: MapSet.new(), revealed_cards: MapSet.new()}
   """
   def new(players) when is_integer(players) and players > 0 do
     %__MODULE__{
       players: players,
       hands: init_player_map(players),
-      absent_cards: init_player_map(players),
-      answers: MapSet.new()
+      absent_cards: init_player_map(players)
     }
   end
 
@@ -56,29 +59,35 @@ defmodule Clueless.ClueGame do
 
   @doc """
   Returns a list of cards that are certainly present in the envelope in a certain point of the game.
-  A card is considered present in the envelope if it is not present in any player's hand (it is present in every player absent cards set).
+  A card is considered present in the envelope if it is not present in any player's hand (it is present in every player absent cards set),
+  but it is not a revealed card.
 
   ## Examples
 
-      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}
-      iex> envelope_cards(absent_cards)
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}, revealed_cards: MapSet.new()}
+      iex> ClueGame.envelope_cards(game)
       [:garage]
 
-      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife])}
-      iex> envelope_cards(absent_cards)
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife])}, revealed_cards: MapSet.new()}
+      iex> ClueGame.envelope_cards(game)
       []
 
-      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new()}
-      iex> envelope_cards(absent_cards)
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new()}, revealed_cards: MapSet.new()}
+      iex> ClueGame.envelope_cards(game)
+      []
+
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage])}, revealed_cards: MapSet.new([:garage])}
+      iex> ClueGame.envelope_cards(game)
       []
   """
-  def envelope_cards(absent_cards) when is_map(absent_cards) do
-    absent_cards
+  def envelope_cards(%__MODULE__{} = game) do
+    game.absent_cards
     |> Map.values()
     |> Enum.reduce(fn envelope, absent_for_player ->
       MapSet.intersection(envelope, absent_for_player)
     end)
     |> Enum.to_list()
+    |> Enum.reject(&(&1 in game.revealed_cards))
   end
 
   @doc """
@@ -101,7 +110,7 @@ defmodule Clueless.ClueGame do
       nil
   """
   def cards_suspect_score(%__MODULE__{} = game) do
-    envelope = envelope_cards(game.absent_cards)
+    envelope = envelope_cards(game)
     hands = game.hands |> Map.values() |> Enum.reduce(MapSet.new(), &MapSet.union(&1, &2))
 
     game.absent_cards
