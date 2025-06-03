@@ -92,7 +92,7 @@ defmodule Clueless.ClueGame do
 
   @doc """
   Returns a keyword list of cards with the number of times they are present in an absent set.
-  If a card is in the envelope or in a hand, it is not included.
+  If a card is in the envelope or in a hand or revealed, it is not included.
 
   ## Example
 
@@ -108,6 +108,13 @@ defmodule Clueless.ClueGame do
       2
       iex> result[:garage]
       nil
+
+      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}
+      iex> revealed_cards = MapSet.new([:knife])
+      iex> result = cards_suspect_score(%ClueGame{absent_cards: absent_cards, revealed_cards: revealed_cards})
+      iex> result[:knife]
+      nil
+
   """
   def cards_suspect_score(%__MODULE__{} = game) do
     envelope = envelope_cards(game)
@@ -118,6 +125,7 @@ defmodule Clueless.ClueGame do
     |> Enum.flat_map(&Enum.to_list(&1))
     |> Enum.reject(&(&1 in envelope))
     |> Enum.reject(&(&1 in hands))
+    |> Enum.reject(&(&1 in game.revealed_cards))
     |> Enum.frequencies()
     |> Enum.to_list()
   end

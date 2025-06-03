@@ -26,10 +26,8 @@ defmodule Clueless.RevealedCard do
   def reveal_card(%ClueGame{} = game, card) do
     revealed_cards = MapSet.put(game.revealed_cards, card)
     all_players = Player.all_players(game.players)
-
-    absent_cards =
-      AbsentCard.add_card_to_absent(game.absent_cards, all_players, card)
-
-    %{game | absent_cards: absent_cards, revealed_cards: revealed_cards}
+    absent_cards = AbsentCard.add_card_to_absent(game.absent_cards, all_players, card)
+    game = %{game | absent_cards: absent_cards, revealed_cards: revealed_cards}
+    ClueGame.advance_game(game)
   end
 end
