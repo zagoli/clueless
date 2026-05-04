@@ -26,7 +26,9 @@ defmodule Clueless.Hand do
   """
   def add_card_to_hand(%ClueGame{} = game, player, card)
       when is_integer(player) do
-    if Enum.count(game.hands[player]) >= max_hand_size(game.players) do
+    max_hand_size = max_hand_size(game.players)
+
+    if Enum.count(game.hands[player]) >= max_hand_size do
       game
     else
       hands = add_card_to_player_hand(game.hands, player, card)

@@ -6,7 +6,6 @@ defmodule Clueless.AbsentCardTest do
   doctest Clueless.AbsentCard
 
   describe "add_card_to_absent/3" do
-
     test "does not add a card to a player's absent set twice" do
       game = %ClueGame{
         players: 1,
@@ -17,6 +16,5 @@ defmodule Clueless.AbsentCardTest do
 
       assert game.absent_cards[0] |> Enum.to_list() == [:garage]
     end
-
   end
 end
