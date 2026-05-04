@@ -37,7 +37,7 @@ defmodule Clueless.HandTest do
 
     test "does not add a card if the player already has the maximum number of cards in his hand" do
       game = %ClueGame{
-        players: 1,
+        players: 6,
         hands: %{0 => MapSet.new([:garage, :knife, :kitchen])}
       }
 
@@ -48,7 +48,7 @@ defmodule Clueless.HandTest do
 
     test "adds every card not in hand to player's absent cards at max hand size" do
       game = %ClueGame{
-        players: 1,
+        players: 6,
         hands: %{0 => MapSet.new([:garage, :knife])},
         absent_cards: %{0 => MapSet.new()}
       }
@@ -56,6 +56,7 @@ defmodule Clueless.HandTest do
       game = add_card_to_hand(game, 0, :plum)
 
       assert Enum.count(game.absent_cards[0]) == 21 - 3 - 3 # 21 total cards - 3 in the envelope - 3 in the player's hand
+      assert MapSet.intersection(game.hands[0], game.absent_cards[0]) |> Enum.empty?()
     end
   end
 

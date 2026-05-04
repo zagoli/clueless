@@ -8,6 +8,7 @@ defmodule Clueless.Hand do
 
   @doc """
   Adds a card to a player's hand and computes the new game state.
+  If the player already has the maximum number of cards in their hand, the game state is not modified.
 
   ## Parameters
     - `Clueless.ClueGame`: the current game state.
@@ -25,18 +26,22 @@ defmodule Clueless.Hand do
   """
   def add_card_to_hand(%ClueGame{} = game, player, card)
       when is_integer(player) do
-    hands = add_card_to_player_hand(game.hands, player, card)
+    if Enum.count(game.hands[player]) >= max_hand_size(game.players) do
+      game
+    else
+      hands = add_card_to_player_hand(game.hands, player, card)
 
-    absent_cards =
-      AbsentCard.add_card_to_absent(
-        game.absent_cards,
-        Player.players_between(game.players, player, player),
-        card
-      )
+      absent_cards =
+        AbsentCard.add_card_to_absent(
+          game.absent_cards,
+          Player.players_between(game.players, player, player),
+          card
+        )
 
-    game = %{game | hands: hands, absent_cards: absent_cards}
+      game = %{game | hands: hands, absent_cards: absent_cards}
 
-    ClueGame.advance_game(game)
+      ClueGame.advance_game(game)
+    end
   end
 
   defp add_card_to_player_hand(hands, player, card) do
