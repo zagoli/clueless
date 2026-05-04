@@ -20,9 +20,9 @@ defmodule Clueless.Hand do
 
   ## Examples
 
-      iex> game = ClueGame.new(2)
-      iex> add_card_to_hand(game, 0, :garage)
-      %ClueGame{hands: %{0 => MapSet.new([:garage]), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new([:garage])}, answers: MapSet.new(), players: 2}
+      iex> game = ClueGame.new(2, [])
+      iex> add_card_to_hand(game, 0, "garage")
+      %ClueGame{hands: %{0 => MapSet.new(["garage"]), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new(["garage"])}, answers: MapSet.new(), revealed_cards: MapSet.new(), players: 2, all_cards: MapSet.new()}
   """
   def add_card_to_hand(%ClueGame{} = game, player, card)
       when is_integer(player) do

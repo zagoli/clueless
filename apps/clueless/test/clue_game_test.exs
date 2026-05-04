@@ -9,7 +9,7 @@ defmodule Clueless.ClueGameTest do
   describe "advance_game/1" do
     setup do
       %{
-        game: ClueGame.new(2)
+        game: ClueGame.new(2, [])
       }
     end
 
