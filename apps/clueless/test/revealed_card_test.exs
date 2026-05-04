@@ -11,12 +11,12 @@ defmodule Clueless.RevealedCardTest do
       game =
         %ClueGame{
           players: 3,
-          answers: MapSet.new([%Answer{player: 2, cards: MapSet.new([:knife, :garage])}])
+          answers: MapSet.new([%Answer{player: 2, cards: MapSet.new(["knife", "garage"])}])
         }
-        |> reveal_card(:garage)
+        |> reveal_card("garage")
 
-      assert game.revealed_cards == MapSet.new([:garage])
-      assert game.hands[2] == MapSet.new([:knife])
+      assert game.revealed_cards == MapSet.new(["garage"])
+      assert game.hands[2] == MapSet.new(["knife"])
     end
   end
 end

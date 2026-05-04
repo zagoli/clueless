@@ -10,16 +10,16 @@ defmodule Clueless.HandTest do
     test "adds a card and advance game" do
       game = %ClueGame{
         players: 2,
-        answers: MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}])
+        answers: MapSet.new([%Answer{cards: MapSet.new(["garage", "knife"]), player: 1}])
       }
 
-      game = add_card_to_hand(game, 0, :garage)
+      game = add_card_to_hand(game, 0, "garage")
 
       # Used all answers
       assert Enum.empty?(game.answers)
 
       # Garage card was added to Mickey's hand
-      assert game.hands[0] |> Enum.to_list() == [:garage]
+      assert game.hands[0] |> Enum.to_list() == ["garage"]
       # Used all answers (game advanced)
       assert Enum.empty?(game.answers)
     end
@@ -27,33 +27,33 @@ defmodule Clueless.HandTest do
     test "does not add a card twice to the same player's hand" do
       game = %ClueGame{
         players: 1,
-        hands: %{0 => MapSet.new([:garage])}
+        hands: %{0 => MapSet.new(["garage"])}
       }
 
-      game = add_card_to_hand(game, 0, :garage)
+      game = add_card_to_hand(game, 0, "garage")
 
-      assert game.hands[0] |> Enum.to_list() == [:garage]
+      assert game.hands[0] |> Enum.to_list() == ["garage"]
     end
 
     test "does not add a card if the player already has the maximum number of cards in his hand" do
       game = %ClueGame{
         players: 6,
-        hands: %{0 => MapSet.new([:garage, :knife, :kitchen])}
+        hands: %{0 => MapSet.new(["garage", "knife", "kitchen"])}
       }
 
-      game = add_card_to_hand(game, 0, :plum)
+      game = add_card_to_hand(game, 0, "plum")
 
-      refute Enum.member?(game.hands[0], :plum)
+      refute Enum.member?(game.hands[0], "plum")
     end
 
     test "adds every card not in hand to player's absent cards at max hand size" do
       game = %ClueGame{
         players: 6,
-        hands: %{0 => MapSet.new([:garage, :knife])},
+        hands: %{0 => MapSet.new(["garage", "knife"])},
         absent_cards: %{0 => MapSet.new()}
       }
 
-      game = add_card_to_hand(game, 0, :plum)
+      game = add_card_to_hand(game, 0, "plum")
 
       # 21 total cards - 3 in the envelope - 3 in the player's hand
       assert Enum.count(game.absent_cards[0]) == 21 - 3 - 3

@@ -26,9 +26,10 @@ defmodule Clueless.Hand do
   """
   def add_card_to_hand(%ClueGame{} = game, player, card)
       when is_integer(player) do
+    player_hand_size = player_hand_size(game, player)
     max_hand_size = max_hand_size(game.players)
 
-    if Enum.count(game.hands[player]) >= max_hand_size do
+    if player_hand_size >= max_hand_size do
       game
     else
       hands = add_card_to_player_hand(game.hands, player, card)
@@ -40,6 +41,14 @@ defmodule Clueless.Hand do
           card
         )
 
+      absent_cards =
+        if player_hand_size == max_hand_size do
+          # TODO
+          AbsentCard.add_card_to_absent(absent_cards, player, "cards_map_set")
+        else
+          absent_cards
+        end
+
       game = %{game | hands: hands, absent_cards: absent_cards}
 
       ClueGame.advance_game(game)
@@ -50,6 +59,11 @@ defmodule Clueless.Hand do
     Map.update(hands, player, MapSet.new([card]), fn
       hand -> MapSet.put(hand, card)
     end)
+  end
+
+  defp player_hand_size(game, player) do
+    player_hand = game.hands[player]
+    if player_hand, do: Enum.count(player_hand), else: 0
   end
 
   @doc """
