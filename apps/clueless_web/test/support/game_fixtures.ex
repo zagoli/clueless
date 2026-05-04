@@ -3,7 +3,7 @@ defmodule CluelessWeb.GameFixtures do
   import Phoenix.ConnTest
 
   def create_game(%{conn: conn}) do
-    conn = post(conn, ~p"/api/new_game", players: 3)
+    conn = post(conn, ~p"/api/new_game", players: 3, cards: [])
     %{conn: conn}
   end
 end

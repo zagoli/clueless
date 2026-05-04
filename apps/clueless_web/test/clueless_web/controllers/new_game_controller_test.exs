@@ -3,7 +3,7 @@ defmodule CluelessWeb.NewGameControllerTest do
 
   describe "POST new_game" do
     test "creates a new game", %{conn: conn} do
-      conn = post(conn, ~p"/api/new_game", players: 3)
+      conn = post(conn, ~p"/api/new_game", players: 3, cards: [])
 
       assert text_response(conn, 201) == ""
       assert get_session(conn, :game) != nil

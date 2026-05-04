@@ -50,13 +50,13 @@ defmodule Clueless.HandTest do
       game = %ClueGame{
         players: 6,
         hands: %{0 => MapSet.new(["garage", "knife"])},
-        absent_cards: %{0 => MapSet.new()}
+        absent_cards: %{0 => MapSet.new()},
+        all_cards: MapSet.new(["garage", "knife", "plum", "kitchen"])
       }
 
       game = add_card_to_hand(game, 0, "plum")
 
-      # 21 total cards - 3 in the envelope - 3 in the player's hand
-      assert Enum.count(game.absent_cards[0]) == 21 - 3 - 3
+      assert game.absent_cards[0] |> Enum.to_list() == ["kitchen"]
       assert MapSet.intersection(game.hands[0], game.absent_cards[0]) |> Enum.empty?()
     end
   end
