@@ -44,4 +44,17 @@ defmodule Clueless.Hand do
       hand -> MapSet.put(hand, card)
     end)
   end
+
+  @doc """
+  Returns the maximum hand size for a given number of players.
+
+  ## Examples
+
+      iex> Clueless.Hand.max_hand_size(3)
+      6
+  """
+  def max_hand_size(players) when is_integer(players) do
+    # 18 = 21 cards total - 3 cards in the envelope
+    Integer.floor_div(18, players)
+  end
 end
