@@ -10,7 +10,8 @@ defmodule Clueless.QuestionTest do
     test "adds a question and advances the game" do
       game = %ClueGame{
         players: 3,
-        answers: MapSet.new([%Answer{player: 1, cards: MapSet.new(["knife", "garage", "kitchen"])}])
+        answers:
+          MapSet.new([%Answer{player: 1, cards: MapSet.new(["knife", "garage", "kitchen"])}])
       }
 
       question = %Question{
