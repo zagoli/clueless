@@ -20,13 +20,13 @@ defmodule Clueless.Hand do
 
   ## Examples
 
-      iex> game = ClueGame.new(2, [])
-      iex> add_card_to_hand(game, 0, "garage")
-      %ClueGame{hands: %{0 => MapSet.new(["garage"]), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new(["garage"])}, answers: MapSet.new(), revealed_cards: MapSet.new(), players: 2, all_cards: MapSet.new()}
+      iex> game = ClueGame.new(2, ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"])
+      iex> add_card_to_hand(game, 0, "1")
+      %ClueGame{hands: %{0 => MapSet.new(["1"]), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new(["1"])}, answers: MapSet.new(), revealed_cards: MapSet.new(), players: 2, all_cards: MapSet.new(["1", "10", "11", "12", "13","14", "15", "16", "17", "18", "19", "2", "20", "21","3", "4", "5", "6", "7", "8", "9"])}
   """
   def add_card_to_hand(%ClueGame{} = game, player, card)
       when is_integer(player) do
-    max_hand_size = max_hand_size(game.players)
+    max_hand_size = max_hand_size(game.players, Enum.count(game.all_cards))
 
     if player_hand_size(game.hands, player) >= max_hand_size do
       game
@@ -68,15 +68,16 @@ defmodule Clueless.Hand do
   end
 
   @doc """
-  Returns the maximum hand size for a given number of players.
+  Returns the maximum hand size for a given number of players and total cards.
 
   ## Examples
 
-      iex> Clueless.Hand.max_hand_size(3)
+      iex> Clueless.Hand.max_hand_size(3, 21)
       6
   """
-  def max_hand_size(players) when is_integer(players) do
-    # 18 = 21 cards total - 3 cards in the envelope
-    Integer.floor_div(18, players)
+  def max_hand_size(players, number_of_cards)
+      when is_integer(players) and is_integer(number_of_cards) do
+    # The total number of cards is reduced by 3 to account for the 3 cards that are set aside as the answer.
+    Integer.floor_div(number_of_cards - 3, players)
   end
 end

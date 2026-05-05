@@ -49,24 +49,23 @@ defmodule Clueless.HandTest do
     test "adds every card not in hand to player's absent cards at max hand size" do
       game = %ClueGame{
         players: 6,
-        hands: %{0 => MapSet.new(["garage", "knife"])},
-        absent_cards: %{0 => MapSet.new()},
-        all_cards: MapSet.new(["garage", "knife", "plum", "kitchen"])
+        hands: %{0 => MapSet.new(["1", "2"])},
+        absent_cards: %{0 => MapSet.new()}
       }
 
-      game = add_card_to_hand(game, 0, "plum")
+      game = add_card_to_hand(game, 0, "3")
 
-      assert game.absent_cards[0] |> Enum.to_list() == ["kitchen"]
+      assert game.absent_cards[0] |> Enum.count() == 18
       assert MapSet.intersection(game.hands[0], game.absent_cards[0]) |> Enum.empty?()
     end
   end
 
-  describe "max_hand_size/1" do
-    test "returns the maximum hand size for a given number of players" do
-      assert max_hand_size(3) == 6
-      assert max_hand_size(4) == 4
-      assert max_hand_size(5) == 3
-      assert max_hand_size(6) == 3
+  describe "max_hand_size/2" do
+    test "returns the maximum hand size for a given number of players and total cards" do
+      assert max_hand_size(3, 21) == 6
+      assert max_hand_size(4, 21) == 4
+      assert max_hand_size(5, 21) == 3
+      assert max_hand_size(6, 21) == 3
     end
   end
 end
