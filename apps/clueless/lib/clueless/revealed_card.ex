@@ -14,14 +14,14 @@ defmodule Clueless.RevealedCard do
 
   ## Examples
 
-      iex> game = Clueless.ClueGame.new(2)
-      iex> game = reveal_card(game, :knife)
+      iex> game = Clueless.ClueGame.new(2, [])
+      iex> game = reveal_card(game, "knife")
       iex> game.revealed_cards
-      MapSet.new([:knife])
+      MapSet.new(["knife"])
       iex> game.absent_cards[0]
-      MapSet.new([:knife])
+      MapSet.new(["knife"])
       iex> game.absent_cards[1]
-      MapSet.new([:knife])
+      MapSet.new(["knife"])
   """
   def reveal_card(%ClueGame{} = game, card) do
     revealed_cards = MapSet.put(game.revealed_cards, card)

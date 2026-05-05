@@ -38,9 +38,8 @@ defmodule Clueless.Question do
         question.cards
       )
 
-    game = %{game | answers: answers, absent_cards: absent_cards}
-
-    ClueGame.advance_game(game)
+    %{game | answers: answers, absent_cards: absent_cards}
+    |> ClueGame.advance_game()
   end
 
   defp add_to_absent(absent_cards, players, asked_by, :nobody, cards_to_add) do

@@ -12,21 +12,46 @@ defmodule Clueless.ClueGame do
             absent_cards: %{},
             answers: MapSet.new(),
             revealed_cards: MapSet.new(),
-            players: 0
+            players: 0,
+            all_cards:
+              MapSet.new([
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "21"
+              ])
 
   @doc """
-  Creates a new game with the specified number of players.
+  Creates a new game with the specified number of players and the list of all cards in the game.
 
   ## Examples
 
-      iex> ClueGame.new(2)
-      %ClueGame{players: 2, hands: %{0 => MapSet.new(), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new()}, answers: MapSet.new(), revealed_cards: MapSet.new()}
+      iex> ClueGame.new(2, ["garage", "knife", "candlestick"])
+      %ClueGame{players: 2, hands: %{0 => MapSet.new(), 1 => MapSet.new()}, absent_cards: %{0 => MapSet.new(), 1 => MapSet.new()}, answers: MapSet.new(), revealed_cards: MapSet.new(), all_cards: MapSet.new(["garage", "knife", "candlestick"])}
   """
-  def new(players) when is_integer(players) and players > 0 do
+  def new(players, all_cards) when is_integer(players) and players > 0 and is_list(all_cards) do
     %__MODULE__{
       players: players,
       hands: init_player_map(players),
-      absent_cards: init_player_map(players)
+      absent_cards: init_player_map(players),
+      all_cards: MapSet.new(all_cards)
     }
   end
 
@@ -64,19 +89,19 @@ defmodule Clueless.ClueGame do
 
   ## Examples
 
-      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}, revealed_cards: MapSet.new()}
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new(["garage"]), 1 => MapSet.new(["garage", "knife"])}, revealed_cards: MapSet.new()}
       iex> ClueGame.envelope_cards(game)
-      [:garage]
+      ["garage"]
 
-      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife])}, revealed_cards: MapSet.new()}
-      iex> ClueGame.envelope_cards(game)
-      []
-
-      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new()}, revealed_cards: MapSet.new()}
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new(["garage"]), 1 => MapSet.new(["knife"])}, revealed_cards: MapSet.new()}
       iex> ClueGame.envelope_cards(game)
       []
 
-      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage])}, revealed_cards: MapSet.new([:garage])}
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new(["garage"]), 1 => MapSet.new()}, revealed_cards: MapSet.new()}
+      iex> ClueGame.envelope_cards(game)
+      []
+
+      iex> game = %ClueGame{absent_cards: %{0 => MapSet.new(["garage"]), 1 => MapSet.new(["garage"])}, revealed_cards: MapSet.new(["garage"])}
       iex> ClueGame.envelope_cards(game)
       []
   """
@@ -96,23 +121,23 @@ defmodule Clueless.ClueGame do
 
   ## Example
 
-      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}
+      iex> absent_cards = %{0 => MapSet.new(["garage"]), 1 => MapSet.new(["garage", "knife"])}
       iex> result = cards_suspect_score(%ClueGame{absent_cards: absent_cards})
-      iex> result[:knife]
+      iex> Map.new(result)["knife"]
       1
 
-      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:knife]), 2 => MapSet.new([:knife])}
-      iex> hands = %{2 => MapSet.new([:garage])}
+      iex> absent_cards = %{0 => MapSet.new(["garage"]), 1 => MapSet.new(["knife"]), 2 => MapSet.new(["knife"])}
+      iex> hands = %{2 => MapSet.new(["garage"])}
       iex> result = cards_suspect_score(%ClueGame{absent_cards: absent_cards, hands: hands})
-      iex> result[:knife]
+      iex> Map.new(result)["knife"]
       2
-      iex> result[:garage]
+      iex> Map.new(result)["garage"]
       nil
 
-      iex> absent_cards = %{0 => MapSet.new([:garage]), 1 => MapSet.new([:garage, :knife])}
-      iex> revealed_cards = MapSet.new([:knife])
+      iex> absent_cards = %{0 => MapSet.new(["garage"]), 1 => MapSet.new(["garage", "knife"])}
+      iex> revealed_cards = MapSet.new(["knife"])
       iex> result = cards_suspect_score(%ClueGame{absent_cards: absent_cards, revealed_cards: revealed_cards})
-      iex> result[:knife]
+      iex> Map.new(result)["knife"]
       nil
 
   """

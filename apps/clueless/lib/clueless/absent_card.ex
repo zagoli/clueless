@@ -11,43 +11,43 @@ defmodule Clueless.AbsentCard do
 
     ## Examples
 
-      iex> absent_cards = %{1 => MapSet.new([:knife])}
-      iex> absent_cards = add_card_to_absent(absent_cards, 1, :garage)
+      iex> absent_cards = %{1 => MapSet.new(["knife"])}
+      iex> absent_cards = add_card_to_absent(absent_cards, 1, "garage")
       iex> absent_cards[1]
-      MapSet.new([:knife, :garage])
+      MapSet.new(["garage", "knife"])
 
-      iex> absent_cards = add_card_to_absent(%{}, 2, :knife)
+      iex> absent_cards = add_card_to_absent(%{}, 2, "knife")
       iex> absent_cards[2]
-      MapSet.new([:knife])
+      MapSet.new(["knife"])
 
-      iex> absent_cards = %{1 => MapSet.new([:knife])}
-      iex> absent_cards = add_card_to_absent(absent_cards, [1, 2], :garage)
+      iex> absent_cards = %{1 => MapSet.new(["knife"])}
+      iex> absent_cards = add_card_to_absent(absent_cards, [1, 2], "garage")
       iex> absent_cards[1]
-      MapSet.new([:knife, :garage])
+      MapSet.new(["garage", "knife"])
       iex> absent_cards[2]
-      MapSet.new([:garage])
+      MapSet.new(["garage"])
 
-      iex> absent_cards = add_card_to_absent(%{}, [2], :knife)
+      iex> absent_cards = add_card_to_absent(%{}, [2], "knife")
       iex> absent_cards[2]
-      MapSet.new([:knife])
+      MapSet.new(["knife"])
 
-      iex> absent_cards = add_card_to_absent(%{1 => MapSet.new([:knife])}, [], :garage)
+      iex> absent_cards = add_card_to_absent(%{1 => MapSet.new(["knife"])}, [], "garage")
       iex> absent_cards[1]
-      MapSet.new([:knife])
+      MapSet.new(["knife"])
 
-      iex> absent_cards = add_card_to_absent(%{1 => MapSet.new([:knife])}, [2], :knife)
+      iex> absent_cards = add_card_to_absent(%{1 => MapSet.new(["knife"])}, [2], "knife")
       iex> absent_cards[1]
-      MapSet.new([:knife])
+      MapSet.new(["knife"])
 
-      iex> absent_cards = add_card_to_absent(%{}, 1, MapSet.new([:garage, :knife]))
+      iex> absent_cards = add_card_to_absent(%{}, 1, MapSet.new(["garage", "knife"]))
       iex> absent_cards[1]
-      MapSet.new([:garage, :knife])
+      MapSet.new(["garage", "knife"])
 
-      iex> absent_cards = add_card_to_absent(%{}, [1, 2], MapSet.new([:garage, :knife]))
+      iex> absent_cards = add_card_to_absent(%{}, [1, 2], MapSet.new(["garage", "knife"]))
       iex> absent_cards[1]
-      MapSet.new([:garage, :knife])
+      MapSet.new(["garage", "knife"])
       iex> absent_cards[2]
-      MapSet.new([:garage, :knife])
+      MapSet.new(["garage", "knife"])
 
   """
   def add_card_to_absent(absent_cards, players, %MapSet{} = cards)

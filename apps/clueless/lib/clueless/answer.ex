@@ -20,22 +20,22 @@ defmodule Clueless.Answer do
 
   ## Examples
 
-      iex> cards = MapSet.new([:garage, :knife, :kitchen])
+      iex> cards = MapSet.new(["garage", "knife", "kitchen"])
       iex> player = 1
       iex> answers = Answer.maybe_add_answer(MapSet.new(), cards, player, %{})
       iex> Enum.count(answers)
       1
 
-      iex> cards = MapSet.new([:garage, :knife, :kitchen])
+      iex> cards = MapSet.new(["garage", "knife", "kitchen"])
       iex> player = 1
-      iex> hands = %{1 => MapSet.new([:garage])}
+      iex> hands = %{1 => MapSet.new(["garage"])}
       iex> answers = Answer.maybe_add_answer(MapSet.new(), cards, player, hands)
       iex> Enum.count(answers)
       0
 
-      iex> cards = MapSet.new([:garage, :knife, :kitchen])
+      iex> cards = MapSet.new(["garage", "knife", "kitchen"])
       iex> player = :nobody
-      iex> hands = %{1 => MapSet.new([:garage])}
+      iex> hands = %{1 => MapSet.new(["garage"])}
       iex> answers = Answer.maybe_add_answer(MapSet.new(), cards, player, hands)
       iex> Enum.count(answers)
       0
@@ -65,14 +65,14 @@ defmodule Clueless.Answer do
 
   ## Examples
 
-      iex> answers = MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}, %Answer{cards: MapSet.new([:garage]), player: 2}])
-      iex> answers_to_remove = MapSet.new([%Answer{cards: MapSet.new([:garage]), player: 2}])
+      iex> answers = MapSet.new([%Answer{cards: MapSet.new(["garage", "knife"]), player: 1}, %Answer{cards: MapSet.new(["garage"]), player: 2}])
+      iex> answers_to_remove = MapSet.new([%Answer{cards: MapSet.new(["garage"]), player: 2}])
       iex> answers = Answer.remove_answers(answers, answers_to_remove)
       iex> Enum.count(answers)
       1
 
-      iex> answers = MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}, %Answer{cards: MapSet.new([:garage]), player: 2}])
-      iex> answers_to_remove = MapSet.new([%Answer{cards: MapSet.new([:kitchen]), player: 2}])
+      iex> answers = MapSet.new([%Answer{cards: MapSet.new(["garage", "knife"]), player: 1}, %Answer{cards: MapSet.new(["garage"]), player: 2}])
+      iex> answers_to_remove = MapSet.new([%Answer{cards: MapSet.new(["kitchen"]), player: 2}])
       iex> answers = Answer.remove_answers(answers, answers_to_remove)
       iex> Enum.count(answers)
       2
@@ -86,7 +86,7 @@ defmodule Clueless.Answer do
 
   ## Example
 
-      iex> answers = MapSet.new([%Answer{cards: MapSet.new([:garage, :knife]), player: 1}, %Answer{cards: MapSet.new([:garage]), player: 2}])
+      iex> answers = MapSet.new([%Answer{cards: MapSet.new(["garage", "knife"]), player: 1}, %Answer{cards: MapSet.new(["garage"]), player: 2}])
       iex> found_answers = Answer.discover_cards_in_hand(answers)
       iex> Enum.count(found_answers)
       1
